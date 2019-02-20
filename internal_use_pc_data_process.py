@@ -2,13 +2,23 @@
 
 '''
 internal_use_pc_data_process.py - Automatically seperate the Excel file into difference sheets based on the Pcid
+	usage: py internal_use_pc_data_process.py  (make sure internal_use_pc.xls is on the same foler)
+	
+	Date created : 2/10/2019
+ 	Date last modified : 2/19/2019
 
+ 	Author : Yu Li
+	
 Depends on: xlrd
 			xlwt
 '''
 
 import xlrd
 import xlwt
+import datetime
+
+new_workbook = xlwt.Workbook()
+
 
 def open_file(path):
 	workbook = xlrd.open_workbook(path)
@@ -18,14 +28,17 @@ def open_file(path):
 	printer_counter = 0
 	server_counter = 0
 	desktop_counter = 0
-	rowNum = 1000
+	rowNum = 0
 	
-	new_workbook = xlwt.Workbook()
 	new_sheet1 = new_workbook.add_sheet('Desktops')
 	new_sheet2 = new_workbook.add_sheet('Laptops')
 	new_sheet3 = new_workbook.add_sheet('Printers')
 	new_sheet4 = new_workbook.add_sheet('Servers')
 	
+	# Get the number of row in the Excel file
+	for row in range(sheet.nrows):
+		rowNum = row
+		
 	while (counter < rowNum):
 		data = [sheet.cell_value(counter, col) for col in range(sheet.ncols)]
 		print(data)
@@ -53,8 +66,11 @@ def open_file(path):
 			
 		counter += 1	
 		
-		new_workbook.save('output.xls')
+def save_file():
+	date_object = datetime.date.today()
+	new_workbook.save("Asset List " + str(date_object) + ".xls")
 
 if __name__ == "__main__":
 	file = "internal_use_pc.xls"
 	open_file(file)
+	save_file()
